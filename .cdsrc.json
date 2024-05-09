@@ -1,1 +1,21 @@
-{}
+{
+    "[development]": {
+       "auth" : {
+            "passport": {
+                "strategy": "mock",
+                "users": {
+                    "Employee": {
+                        "ID": "employee",
+                        "password": "12345",
+                        "roles": ["Employee"]
+                    },
+                    "Admin": {
+                        "ID": "admin",
+                        "password": "12345",
+                        "roles": ["Employee","Admin"]
+                    }
+                }
+            }   
+       } 
+    }
+}

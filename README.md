@@ -136,3 +136,25 @@ Run the command `docker compose up` to start the docker container.
 Open the `docker desktop` and you will able to see two new images created for the database `postgres` and `adminer` in the images section. 
 
 ![docker image](./assets/images/docker-image.png)
+
+In the container section, you will be able to see the running container for the project. 
+
+![docker container](./assets/images/docker-container.png)
+
+Click on the hyperlink in the adminer instance to open the local host on port `8080`. 
+
+In the adminer login page, enter the username as `postgres` and password as `postgres` to login to the database. 
+
+![adminer login](./assets/images/adminer_login.png)
+
+After login, you must now be able to see the databases available inside the container.
+
+![postgres database](./assets/images/postgres_db.png)
+
+
+# Step 7: Create a new database for the Project. 
+
+This step of creating the new database can be done at the time of instantiating the container itself by specifiying the environment variable `POSTGRES_DATABASE` in the `docker-compose.yaml`.
+In this exercise, we will create a database from the `adminer`. 
+
+![new database](./assets/images/New%20Project.gif)

@@ -15,5 +15,6 @@ service Projects {
         }
     ]) as projection on timesheet.Projects;
 
+    // entity Projects as projection on timesheet.Projects;
     annotate Projects with @odata.draft.enabled;
 }

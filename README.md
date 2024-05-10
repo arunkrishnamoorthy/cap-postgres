@@ -157,4 +157,55 @@ After login, you must now be able to see the databases available inside the cont
 This step of creating the new database can be done at the time of instantiating the container itself by specifiying the environment variable `POSTGRES_DATABASE` in the `docker-compose.yaml`.
 In this exercise, we will create a database from the `adminer`. 
 
+Click on create database, and enter the name for database.
+
 ![new database](./assets/images/New%20Project.gif)
+
+
+# Step 8: Add postgres adapter plugin to CAP application.
+
+To add postgres to the Cap application, execute the command 
+
+```sh
+    cds add postgres
+```
+
+This step will add the plugin @cap-js/postgres to the dependencies. 
+
+For more information, refer to the link below:
+
+https://cap.cloud.sap/docs/guides/databases-postgres    
+
+> Note: In my project, the version of @sap/cds was at ^6.8.4. The @cap-js/postgres require the dependency of the @sap/cds to be ^7.x.x. I have upgraded the package to install the postgres db. 
+
+Execute the command `npm install` to install the dependent package `@cap-js/postgres` if it is not already installed to the `node_modules`. 
+
+Package.json
+
+```json
+{
+  "name": "cap-pg",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^7.9.0",
+    "express": "^4",
+    "latest": "^0.2.0",
+    "@cap-js/postgres": "^1"
+  },
+  "devDependencies": {
+    "sqlite3": "^5.0.4"
+  },
+  "scripts": {
+    "start": "cds run"
+  }
+}
+```
+
+# Step 9: Configure PostgreSQL Database 
+
+In the `package.json` or `.cdsrc.json` add the required configuration to connect to the PostgreSQL database. 
+

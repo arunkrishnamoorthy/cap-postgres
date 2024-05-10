@@ -209,3 +209,40 @@ Package.json
 
 In the `package.json` or `.cdsrc.json` add the required configuration to connect to the PostgreSQL database. 
 
+
+```json [2-14]
+{   
+    "requires": {
+        "db": {
+            "kind": "postgres",
+            "impl": "@cap-js/postgres",
+            "credentials": {
+                "host": "localhost",
+                "port": 5432,
+                "user": "postgres",
+                "password": "postgres",
+                "database": "Projects"
+            }
+        }
+    },
+    "[development]": {
+       "auth" : {
+            "passport": {
+                "strategy": "mock",
+                "users": {
+                    "Employee": {
+                        "ID": "employee",
+                        "password": "12345",
+                        "roles": ["Employee"]
+                    },
+                    "Admin": {
+                        "ID": "admin",
+                        "password": "12345",
+                        "roles": ["Employee","Admin"]
+                    }
+                }
+            }   
+       } 
+    }
+}
+```

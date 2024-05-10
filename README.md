@@ -124,4 +124,15 @@ This will also be the username of the database. Some of the other environment va
     POSTGRES_DATABASE: '<Database>'
 ```
 
-2. Create a container named `adminer` and add the image `adminer`. The Adminer runs on the port `8080`
+2. Create a container named `adminer` and add the image `adminer`. The Adminer runs on the port `8080`.
+
+
+# Step 6: Run the docker container. 
+
+To start the container, in the terminal navigate to the root folder of the application, where the `docker-compose.yaml` file is created. 
+
+Run the command `docker compose up` to start the docker container. 
+
+Open the `docker desktop` and you will able to see two new images created for the database `postgres` and `adminer` in the images section. 
+
+![docker image](./assets/images/docker-image.png)

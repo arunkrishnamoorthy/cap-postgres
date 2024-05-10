@@ -192,3 +192,105 @@ In the adminer, you can see the tables created in the database.
 
 ![project entities](./assets/images/project_entities.png)
 
+
+# Step 9: Build and Deploy the service 
+
+Execute the following commands to build and deploy the application. 
+
+Set the endpoint where you want to deploy the service. 
+
+```sh
+  cf api <endpoint>
+```
+
+Login and authenticate. 
+
+```sh
+  cf login / cf login --sso
+```
+
+Add xsuaa to the application. 
+
+```sh
+  cds add xsuaa 
+```
+
+This step will create a file called `xs-secuirty.json`.  Here you can define the roles and scopse needed for the application. 
+
+```json
+{
+  "scopes": [],
+  "attributes": [],
+  "role-templates": []
+}
+```
+
+Add the mta configuration file by executing the command `cds add mta`. This will create a file called `mta.yaml` and add the required configuration. 
+
+```yaml
+_schema-version: '3.1'
+ID: cap-pg
+version: 1.0.0
+description: "A simple CAP project."
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+modules:
+  - name: cap-pg-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      buildpack: nodejs_buildpack
+      readiness-health-check-type: http
+      readiness-health-check-http-endpoint: /health
+    build-parameters:
+      builder: npm
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: cap-pg-postgres
+      - name: cap-pg-auth
+
+  - name: cap-pg-postgres-deployer
+    type: nodejs
+    path: gen/pg
+    parameters:
+      buildpack: nodejs_buildpack
+      no-route: true
+      no-start: true
+      tasks:
+        - name: deploy-to-postgresql
+          command: npm start
+    requires:
+      - name: cap-pg-postgres
+
+resources:
+  - name: cap-pg-postgres
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: postgresql-db
+      service-plan: trial
+  - name: cap-pg-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: cap-pg-${org}-${space}
+        tenant-mode: dedicated
+
+```
+
+Build the tar file by executing command `mbt build`. 
+
+Deploy the application by executing the command `cf deploy mta_archives/..name of build...`.
+
+

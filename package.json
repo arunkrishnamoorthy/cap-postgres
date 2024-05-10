@@ -9,12 +9,19 @@
     "@sap/cds": "^7.9.0",
     "express": "^4",
     "latest": "^0.2.0",
-    "@cap-js/postgres": "^1"
+    "@cap-js/postgres": "^1",
+    "@sap/xssec": "^3"
   },
   "devDependencies": {
+    "@sap/cds-dk": "^7",
     "sqlite3": "^5.0.4"
   },
   "scripts": {
     "start": "cds run"
+  },
+  "cds": {
+    "requires": {
+      "auth": "xsuaa"
+    }
   }
 }

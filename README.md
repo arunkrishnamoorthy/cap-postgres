@@ -35,60 +35,18 @@ entity Projects : cuid {
 # Step 3: Service Definition
 
 Create a service file to expose the entity. To create a service file, create a file named `schema.cds` in the folder `srv` and implement the following code to expose the entity.
-In this step, it is optional to add `@restrict` annotation, to provide user restrictiction. If you skip this step here, then the #Step4 can be skipped.  
+
 
 ```cds
 using {com.demo.timesheet as timesheet} from '../db/schema';
 
 service Projects {
-    entity Projects @(restrict: [
-        {
-            grant: [
-                'READ',
-                'POST'
-            ],
-            to   : ['Employee']
-        },
-        {
-            grant: ['DELETE'],
-            to   : ['Admin ']
-        }
-    ]) as projection on timesheet.Projects;
-
+    entity Projects as projection on timesheet.Projects;
     annotate Projects with @odata.draft.enabled;
 }
 ```
 
-# Step 4: Adding Mock User
-
-In the `.cdsrc.json` add the mock user to authenticate the service via `mocked` strategy. 
-
-```json
-{
-    "[development]": {
-       "auth" : {
-            "passport": {
-                "strategy": "mock",
-                "users": {
-                    "Employee": {
-                        "ID": "employee",
-                        "password": "12345",
-                        "roles": ["Employee"]
-                    },
-                    "Admin": {
-                        "ID": "admin",
-                        "password": "12345",
-                        "roles": ["Employee","Admin"]
-                    }
-                }
-            }   
-       } 
-    }
-}
-
-```
-
-# Step 5: Set up PostgreSql database. 
+# Step 4: Set up PostgreSql database. 
 
 > Pre-requisite: Download and install the `Docker Desktop` on your machine. 
 
@@ -127,7 +85,7 @@ This will also be the username of the database. Some of the other environment va
 2. Create a container named `adminer` and add the image `adminer`. The Adminer runs on the port `8080`.
 
 
-# Step 6: Run the docker container. 
+# Step 5: Run the docker container. 
 
 To start the container, in the terminal navigate to the root folder of the application, where the `docker-compose.yaml` file is created. 
 
@@ -152,7 +110,7 @@ After login, you must now be able to see the databases available inside the cont
 ![postgres database](./assets/images/postgres_db.png)
 
 
-# Step 7: Create a new database for the Project. 
+# Step 6: Create a new database for the Project. 
 
 This step of creating the new database can be done at the time of instantiating the container itself by specifiying the environment variable `POSTGRES_DATABASE` in the `docker-compose.yaml`.
 In this exercise, we will create a database from the `adminer`. 
@@ -162,7 +120,7 @@ Click on create database, and enter the name for database.
 ![new database](./assets/images/New%20Project.gif)
 
 
-# Step 8: Add postgres adapter plugin to CAP application.
+# Step 7: Add postgres adapter plugin to CAP application.
 
 To add postgres to the Cap application, execute the command 
 
@@ -205,12 +163,12 @@ Package.json
 }
 ```
 
-# Step 9: Configure PostgreSQL Database 
+# Step 8: Configure PostgreSQL Database 
 
 In the `package.json` or `.cdsrc.json` add the required configuration to connect to the PostgreSQL database. 
 
 
-```json:highlight={2,4-6}
+```json:highlight={2-10}
 {   
     "requires": {
         "db": {
@@ -224,25 +182,13 @@ In the `package.json` or `.cdsrc.json` add the required configuration to connect
                 "database": "Projects"
             }
         }
-    },
-    "[development]": {
-       "auth" : {
-            "passport": {
-                "strategy": "mock",
-                "users": {
-                    "Employee": {
-                        "ID": "employee",
-                        "password": "12345",
-                        "roles": ["Employee"]
-                    },
-                    "Admin": {
-                        "ID": "admin",
-                        "password": "12345",
-                        "roles": ["Employee","Admin"]
-                    }
-                }
-            }   
-       } 
     }
 }
 ```
+
+To deploy the tables the postgres database, execute the command `cds build` and then `cds deploy`.
+
+In the adminer, you can see the tables created in the database. 
+
+![project entities](./assets/images/project_entities.png)
+

@@ -210,7 +210,7 @@ Package.json
 In the `package.json` or `.cdsrc.json` add the required configuration to connect to the PostgreSQL database. 
 
 
-```json [2-14]
+```json{2-14}
 {   
     "requires": {
         "db": {
